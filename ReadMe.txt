@@ -10,7 +10,7 @@ DMX_Core.ino use Arduino Uno to create DMX512 signals for RS485 chip. // Actuall
   How to use:
   Connect DMX chip input pin to Arduino's TX pin.
   
-Attiny_Fader.ino use a Attiny85 to send and receive fader position with I2C.
+Attiny_Fader.ino use a Attiny85 to send and receive fader position by way of I2C.
   Equipements:
    - Attiny 85
    - L9110H H Bridge (DIP)
