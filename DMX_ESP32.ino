@@ -8,7 +8,6 @@
       License MIT,
     Simple Lighting console with 12 channels using ESP32 DMX Driver
     @section  HISTORY
-
     v1.00
 */
 /**************************************************************************/
@@ -16,9 +15,9 @@
 #include <LXESP32DMX.h>
 #include "esp_task_wdt.h"
 
-#define DMX_SERIAL_OUTPUT_PIN 17
+#define DMX_SERIAL_OUTPUT_PIN 17            //Define TX pin
 
-#define CH1 36
+#define CH1 36                              //Define Channel_1 pin
 #define CH2 39
 #define CH3 34
 #define CH4 35
@@ -32,7 +31,7 @@
 #define CH12 13
 #define MASTER 15
 
-uint8_t dmxbuffer[DMX_MAX_FRAME];
+uint8_t dmxbuffer[DMX_MAX_FRAME];           //Array for store DMX values
 
 /************************************************************************/
 
@@ -43,23 +42,23 @@ void setup() {
    
   pinMode(DMX_SERIAL_OUTPUT_PIN, OUTPUT);
   ESP32DMX.startOutput(DMX_SERIAL_OUTPUT_PIN);
+  setupADC();                               //Lunch ADC setup
+  
   Serial.println("setup complete");
-  
-  setupADC();
-  
 }
 
 /************************************************************************/
 
+  /*  ADC Config parameters  */
 void setupADC() {
-  analogSetWidth(12);
-  analogSetCycles(8);
-  analogSetSamples(1);
-  analogSetClockDiv(1);
-  analogSetAttenuation(ADC_11db);
-  analogSetPinAttenuation(CH1, ADC_11db);
-  adcAttachPin(CH1);
-  adcStart(CH1);
+  analogSetWidth(12);                       //Sets the sample bits and read resolution.
+  analogSetCycles(8);                       //Set number of cycles per sample.
+  analogSetSamples(1);                      //Set number of samples in the range.
+  analogSetClockDiv(1);                     //Set the divider for the ADC clock.
+  analogSetAttenuation(ADC_11db);           //Set the attenuation for all channels.
+  analogSetPinAttenuation(CH1, ADC_11db);   //Set the attenuation for particular pin.
+  adcAttachPin(CH1);                        //Attach pin to ADC.
+  adcStart(CH1);                            //Start ADC conversion on attached pin's bus.
   analogSetPinAttenuation(CH2, ADC_11db);
   adcAttachPin(CH2);
   adcStart(CH2);
@@ -97,13 +96,16 @@ void setupADC() {
   adcAttachPin(MASTER);
   adcStart(MASTER);  
 }
-uint8_t ADC(uint8_t x){
-    float preset = ((analogRead(x))/16);
-    float master = ((analogRead(MASTER))/16);
-    float  calc =  float (preset/255*master);
+
+/*   ADC fonction  */
+uint8_t ADC(uint8_t x){                     
+    float preset = ((analogRead(x))/16);        //Get value from CHx
+    float master = ((analogRead(MASTER))/16);   //Get value from MASTER
+    float  calc =  float (preset/255*master);   //Mastering CHx with MASTER
     uint8_t result = calc;
   return result;
 
+/*  DMX Generator fonction  */
 void copyDMXToOutput(void) {
   xSemaphoreTake( ESP32DMX.lxDataLock, portMAX_DELAY );
   for (int i=1; i<DMX_MAX_FRAME; i++) {
@@ -116,6 +118,7 @@ void copyDMXToOutput(void) {
 
 void loop() {
   
+  /*  Save Channels State   */
   dmxbuffer[1] = ADC(CH1);
   dmxbuffer[2] = ADC(CH2);
   dmxbuffer[3] = ADC(CH3);
@@ -130,7 +133,7 @@ void loop() {
   dmxbuffer[12] = ADC(CH12);
 
   //Serial.println((analogRead(MASTER))/16);
-  copyDMXToOutput();
+  copyDMXToOutput();                            //Send channels values to DMX Generator Fonction
   esp_task_wdt_feed();
   
 }
