@@ -6,7 +6,7 @@
       License BSD, see LXESP32DMX LICENSE, copyright 2017 by Claude Heintz
     EVERYTHING LEFT:
       License MIT,
-    Simple Lighting console with 12 channels using ESP32 DMX Driver
+    Simple Lighting Console with 12 channels using ESP32 DMX Driver
     @section  HISTORY
     v1.00
 */
@@ -31,7 +31,7 @@
 #define CH12 13
 #define MASTER 15
 
-uint8_t dmxbuffer[DMX_MAX_FRAME];           //Array for store DMX values
+uint8_t dmxbuffer[DMX_MAX_FRAME];           //Array to store DMX values
 
 /************************************************************************/
 
@@ -101,7 +101,7 @@ void setupADC() {
 uint8_t ADC(uint8_t x){                     
     float preset = ((analogRead(x))/16);        //Get value from CHx
     float master = ((analogRead(MASTER))/16);   //Get value from MASTER
-    float  calc =  float (preset/255*master);   //Mastering CHx with MASTER
+    float calc =  float (preset/255*master);    //Multiply Channel level by Master factor
     uint8_t result = calc;
   return result;
 
