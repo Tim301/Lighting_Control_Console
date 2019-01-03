@@ -6,10 +6,10 @@
       License BSD, see LXESP32DMX LICENSE, copyright 2017 by Claude Heintz
     EVERYTHING LEFT:
       License MIT,
-    Simple Lighting console with ESP32 DMX Driver
+    Simple Lighting console with 12 channels using ESP32 DMX Driver
     @section  HISTORY
 
-    v0.90
+    v1.00
 */
 /**************************************************************************/
 
@@ -97,11 +97,12 @@ void setupADC() {
   adcAttachPin(MASTER);
   adcStart(MASTER);  
 }
-
-uint8_t ADC(int x){
-  uint8_t  result = ((analogRead(x))/16);
+uint8_t ADC(uint8_t x){
+    float preset = ((analogRead(x))/16);
+    float master = ((analogRead(MASTER))/16);
+    float  calc =  float (preset/255*master);
+    uint8_t result = calc;
   return result;
-}
 
 void copyDMXToOutput(void) {
   xSemaphoreTake( ESP32DMX.lxDataLock, portMAX_DELAY );
@@ -127,9 +128,8 @@ void loop() {
   dmxbuffer[10] = ADC(CH10);
   dmxbuffer[11] = ADC(CH11);
   dmxbuffer[12] = ADC(CH12);
-  dmxbuffer[13] = ADC(MASTER);
 
-  Serial.println(dmxbuffer[13]);
+  //Serial.println((analogRead(MASTER))/16);
   copyDMXToOutput();
   esp_task_wdt_feed();
   
