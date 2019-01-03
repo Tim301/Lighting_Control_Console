@@ -9,7 +9,7 @@
     Simple Lighting console with ESP32 DMX Driver
     @section  HISTORY
 
-    v1.00 - First release
+    v0.90
 */
 /**************************************************************************/
 
