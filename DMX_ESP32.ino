@@ -97,7 +97,7 @@ void setupADC() {
   adcStart(MASTER);  
 }
 
-//*   ADC fonction  */
+/*   ADC fonction  */
 uint8_t ADC(uint8_t x){                     
     uint8_t preset = (analogRead(x)) >> 4;        //Get value from CHx
     uint8_t master = (analogRead(MASTER)) >> 4;   //Get value from MASTER
