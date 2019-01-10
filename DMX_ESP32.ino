@@ -8,7 +8,7 @@
       License MIT,
     Simple Lighting Console with 12 channels using ESP32 DMX Driver
     @section  HISTORY
-    v1.00
+    v1.01
 */
 /**************************************************************************/
 
