@@ -97,13 +97,13 @@ void setupADC() {
   adcStart(MASTER);  
 }
 
-/*   ADC fonction  */
+//*   ADC fonction  */
 uint8_t ADC(uint8_t x){                     
-    float preset = ((analogRead(x))/16);        //Get value from CHx
-    float master = ((analogRead(MASTER))/16);   //Get value from MASTER
-    float calc =  float (preset/255*master);    //Multiply Channel level by Master factor
-    uint8_t result = calc;
+    uint8_t preset = (analogRead(x)) >> 4;        //Get value from CHx
+    uint8_t master = (analogRead(MASTER)) >> 4;   //Get value from MASTER
+    uint8_t result = (unsigned int) (preset*master/255);  //Multiply Channel level by Master factor
   return result;
+}
 
 /*  DMX Generator fonction  */
 void copyDMXToOutput(void) {
