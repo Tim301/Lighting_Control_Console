@@ -3,6 +3,7 @@
 #To make the screen communicate with the RPI, plug the 3 and 5 pins (GPIO 2 and 3)
 #Pin 3 -> I2C SDA
 #Pin 5 -> I2C SDL
+#French tuto : https://www.gotronic.fr/pj2-sbc-lcd16x2-fr-1441.pdf
 
 import lcddriver
 from time import*
