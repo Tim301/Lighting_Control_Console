@@ -63,23 +63,34 @@ font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 20)
 
 
 start=time.time()
+raw_value = mcp.read_adc(0)
 while True:
-	value = mcp.read_adc(0)
+	new_raw_value = mcp.read_adc(0)
+
+	#Because of a non stable input voltage, the read value is not constant
+	#We need to do a hysteresis
+	if new_raw_value < raw_value-5 or new_raw_value  > raw_value+5:
+		raw_value = new_raw_value
+
+	raw_value_str = str(raw_value)
+	value = (raw_value*100)/1023 
 	value_str = str(value)
-	print "The value is", value
+	#print "The value is", value
+
 	#Draw some text
 	draw.text((0,0), value_str, font=font, fill=255)
+        draw.text((40,0), "%", font=font, fill=255)
+        draw.text((0,30), raw_value_str, font=font, fill=255)
 	#Update display
 	disp.image(image)
 	disp.display()
-
 	#Refresh text
 	image = Image.new('1', (width, height))
 	draw = ImageDraw.Draw(image)
 	draw.text((0,0), " ", font=font, fill=255)
+        draw.text((0,30), " ", font=font, fill=255)
 
-
-	
+#end
 '''
 draw.text((0,0), 'Canal : 512', font=font, fill=255)
 font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 22)
