@@ -21,13 +21,14 @@ ser = serial.Serial(
 # Initialize variable
 universize = 512
 dmxbuffer = [0] * universize
+master = 255
 
 # Send Channels through DMX
 def dmxfonction():
     global universize
     global dmxbuffer
     for i in range(0, universize, 1):
-        ser.write(struct.pack('<H', dmxbuffer[i]))
+        ser.write(struct.pack('<H', (dmxbuffer[i])/255*master))
 
 # Test values
 dmxbuffer[0] = 126      # Master
