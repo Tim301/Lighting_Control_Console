@@ -27,6 +27,7 @@ master = 255
 def dmxfonction():
     global universize
     global dmxbuffer
+    global master
     for i in range(0, universize, 1):
         ser.write(struct.pack('<H', (dmxbuffer[i]/255*master))
 
