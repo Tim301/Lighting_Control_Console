@@ -28,7 +28,7 @@ def dmxfonction():
     global universize
     global dmxbuffer
     for i in range(0, universize, 1):
-        ser.write(struct.pack('<H', (dmxbuffer[i])/255*master))
+        ser.write(struct.pack('<H', (dmxbuffer[i]/255*master))
 
 # Test values
 dmxbuffer[0] = 126      # Master
