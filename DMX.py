@@ -21,7 +21,8 @@ master = 255
 	
 def dmx():
 	global universize	
-	global list		
+	global list
+	global master
 	for j in range(0, universize, 1):
 		ser.write(struct.pack('<H', list[j]/255*master))
 		print(j)
